@@ -1,0 +1,35 @@
+cmake_minimum_required(VERSION 3.22)
+
+project(JUCEtestPlugin VERSION 0.1.0)
+
+# Set path to JUCE
+set(JUCE_DIR "PUT DIRECTORY TO JUCE HERE")
+
+# JUCE setup
+add_subdirectory(${JUCE_DIR} JUCE)
+
+juce_add_plugin(JUCEtestPlugin
+    COMPANY_NAME "NAME HERE"
+    IS_SYNTH FALSE
+    NEEDS_MIDI_INPUT FALSE
+    NEEDS_MIDI_OUTPUT FALSE
+    EDITOR_WANTS_KEYBOARD_FOCUS FALSE
+    COPY_PLUGIN_AFTER_BUILD TRUE
+    PLUGIN_MANUFACTURER_CODE Juce
+    PLUGIN_CODE MDP1
+    FORMATS VST3 Standalone
+    PRODUCT_NAME "JUCEtestPlugin"
+)
+
+target_sources(JUCEtestPlugin PRIVATE
+    Source/PluginProcessor.cpp
+    Source/PluginProcessor.h
+    Source/PluginEditor.cpp
+    Source/PluginEditor.h
+)
+
+target_compile_features(JUCEtestPlugin PRIVATE cxx_std_17)
+
+target_link_libraries(JUCEtestPlugin PRIVATE
+    juce::juce_audio_utils
+)
