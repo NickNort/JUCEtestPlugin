@@ -1,3 +1,4 @@
 CMakeLists.txt
 build/
 Builds/
+JuceLibraryCode/modules/juce_audio_devices/asio
