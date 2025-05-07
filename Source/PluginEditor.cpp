@@ -29,12 +29,13 @@ JUCEtestPluginAudioProcessorEditor::~JUCEtestPluginAudioProcessorEditor()
 //==============================================================================
 void JUCEtestPluginAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
+    // setting background color
+    g.fillAll (juce::Colour(0xff221c2b));
 
-    g.setColour (juce::Colours::white);
-    g.setFont (juce::FontOptions (15.0f));
-    g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
+    // setting color of the text
+    g.setColour(juce::Colour(0xffb18cbb));
+    g.setFont (juce::FontOptions (40.0f));
+    g.drawFittedText ("Nick\'s Test Plugin", getLocalBounds(), juce::Justification::centredTop, 1);
 }
 
 void JUCEtestPluginAudioProcessorEditor::resized()
@@ -42,5 +43,16 @@ void JUCEtestPluginAudioProcessorEditor::resized()
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
 
-    button1.setBounds(getLocalBounds().reduced(20));
+    // defining some margin space:
+    auto leftMargin = getWidth() * 0.05;    // dedicate 5% of the width to left margin
+    auto rightMargin = getWidth() * 0.95;   // dedicate 5% of the width to right margin
+	auto topMargin = getHeight() * 0.05;    // dedicate 5% of the height to top margin
+	auto bottomMargin = getHeight() * 0.95; // dedicate 5% of the height to bottom margin
+	// button settings:
+    auto buttonWidth = (getWidth() * 0.9) * 0.25;   // dedicate 25% of the non-margin space to button width
+	auto buttonHeight = buttonWidth * 0.75;         // set the button height to 75% of the button width
+
+    // adding the button and centering it
+    button1.setBounds((getWidth() * 0.5) - (buttonWidth * 0.5), ((getHeight() * 0.5) - buttonHeight * 0.5),
+        buttonWidth, buttonHeight);
 }
