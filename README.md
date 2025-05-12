@@ -6,4 +6,4 @@ The idea is that I will make an actual one later.
 
 Here is what it looks like thus far (05/12/2025):
 
-![image](https://github.com/user-attachments/assets/4c0bf30e-87ea-4ab2-a80a-7c9f9ca1ddf5)
+![image](https://github.com/user-attachments/assets/616f01da-8e08-4a04-8a25-62d8c8038435)
