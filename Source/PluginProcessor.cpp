@@ -207,9 +207,9 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 //==============================================================================
 juce::AudioProcessorValueTreeState::ParameterLayout JUCEtestPluginAudioProcessor::createParameters() {
     // create parameter vector & add gainLevel and gainToggle as parameters
-	std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
-	params.push_back(std::make_unique<juce::AudioParameterFloat>("GAINLEVEL", "GainLevel", 0.0f, 15.0f, 1.0f));
-	params.push_back(std::make_unique<juce::AudioParameterBool>("GAINTOGGLE", "GainToggle", false));
-
-	return { params.begin(), params.end() };
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("GAINLEVEL", "GainLevel", 0.0f, 15.0f, 1.0f));
+    params.push_back(std::make_unique<juce::AudioParameterBool>("GAINTOGGLE", "GainToggle", false));
+    
+    return { params.begin(), params.end() };
 }
