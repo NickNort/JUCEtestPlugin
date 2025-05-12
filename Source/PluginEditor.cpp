@@ -12,8 +12,8 @@
 //==============================================================================
 
 // Dial1 settings --------------------------------------------------------------
-auto dialWidth = 100;
-auto dialHeight = 100;
+const int dialWidth = 100;
+const int dialHeight = 100;
 void JUCEtestPluginAudioProcessorEditor::initDial1() {
     dial1.setSliderStyle(juce::Slider::RotaryVerticalDrag);
     dial1.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 20);
@@ -25,8 +25,8 @@ void JUCEtestPluginAudioProcessorEditor::initDial1() {
 }
 
 // Button1 settings ------------------------------------------------------------
-auto buttonWidth = 80;
-auto buttonHeight = 60;
+const int buttonWidth = 80;
+const int buttonHeight = 60;
 void JUCEtestPluginAudioProcessorEditor::initButton1() {
     button1.setButtonText("Gain");
     button1.setColour(juce::TextButton::ColourIds::buttonColourId, JUCEtestPluginAudioProcessorEditor::myColor5);
