@@ -26,6 +26,12 @@ void JUCEtestPluginAudioProcessorEditor::initDial1() {
     dial1.setDoubleClickReturnValue(true, 0.0);
 }
 
+//void JUCEtestPluginAudioProcessorEditor::sliderValueChanged(juce::Slider* slider) {
+//	//if (slider == &dial1) {
+//	//	audioProcessor.gainLevel = dial1.getValue();
+//	//}
+//}
+
 // Button1 settings ------------------------------------------------------------
 auto buttonWidth = 80;
 auto buttonHeight = 60;
@@ -38,6 +44,12 @@ void JUCEtestPluginAudioProcessorEditor::initButton1() {
     button1.setColour(juce::TextButton::ColourIds::buttonOnColourId, JUCEtestPluginAudioProcessorEditor::myColor5);
 	button1.setClickingTogglesState(true);
 }
+
+//void JUCEtestPluginAudioProcessorEditor::buttonClicked(juce::Button* button) {
+//	//if (button == &button1) {
+//	//	audioProcessor.gainToggle = button1.getToggleState();
+//	//}
+//}
 
 //==============================================================================
 JUCEtestPluginAudioProcessorEditor::JUCEtestPluginAudioProcessorEditor (JUCEtestPluginAudioProcessor& p)

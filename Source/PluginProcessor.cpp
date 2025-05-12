@@ -11,16 +11,18 @@
 
 //==============================================================================
 JUCEtestPluginAudioProcessor::JUCEtestPluginAudioProcessor()
+    :
 #ifndef JucePlugin_PreferredChannelConfigurations
-     : AudioProcessor (BusesProperties()
+      AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
                       #if ! JucePlugin_IsSynth
                        .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
 #endif
+    apvts(*this, nullptr, "Parameters", createParameters())
 {
 }
 
@@ -155,6 +157,14 @@ void JUCEtestPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
         auto* channelData = buffer.getWritePointer (channel);
 
         // ..do something to the data...
+        //if (JUCEtestPluginAudioProcessor::gainToggle) {
+        //    for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
+        //    {
+        //        // Example: simple gain
+        //        //channelData[sample] *= 0.5f;
+        //        channelData[sample] *= JUCEtestPluginAudioProcessor::gainLevel;
+        //    }
+        //}
     }
 }
 
@@ -188,4 +198,14 @@ void JUCEtestPluginAudioProcessor::setStateInformation (const void* data, int si
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new JUCEtestPluginAudioProcessor();
+}
+
+//==============================================================================
+juce::AudioProcessorValueTreeState::ParameterLayout JUCEtestPluginAudioProcessor::createParameters() {
+    // create parameter vector & add gainLevel and gainToggle as parameters
+	std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
+	params.push_back(std::make_unique<juce::AudioParameterFloat>("gainLevel", "GainLevel", 0.0f, 10.0f, 1.0f));
+	params.push_back(std::make_unique<juce::AudioParameterBool>("gainToggle", "GainToggle", false));
+
+	return { params.begin(), params.end() };
 }

@@ -53,7 +53,15 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    //==============================================================================
+    juce::AudioProcessorValueTreeState apvts;
+
+    /*float gainLevel = 1.0f;
+    bool gainToggle = 0;*/
+
 private:
+    juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (JUCEtestPluginAudioProcessor)
 };

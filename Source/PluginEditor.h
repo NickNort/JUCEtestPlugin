@@ -40,9 +40,11 @@ private:
 
     juce::Slider dial1;
     void initDial1();
+	//void sliderValueChanged(juce::Slider* slider) override;
 
     juce::TextButton button1;
     void initButton1();
+    //void buttonClicked(juce::Button* button) override;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (JUCEtestPluginAudioProcessorEditor)
 };
