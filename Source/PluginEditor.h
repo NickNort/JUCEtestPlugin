@@ -40,11 +40,15 @@ private:
 
     juce::Slider dial1;
     void initDial1();
-	//void sliderValueChanged(juce::Slider* slider) override;
 
     juce::TextButton button1;
     void initButton1();
-    //void buttonClicked(juce::Button* button) override;
+
+    // note about C++: apparently when classes are created, they are created in order from
+    // first line to last but when they are destroyed, they are destroyed in reverse order,
+    // so this needs to be declared after the dial so that the dial is not destroyed first.
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> dial1Attachment;
+	std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> button1Attachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (JUCEtestPluginAudioProcessorEditor)
 };

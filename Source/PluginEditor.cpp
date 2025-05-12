@@ -18,19 +18,11 @@ void JUCEtestPluginAudioProcessorEditor::initDial1() {
     addAndMakeVisible(dial1);
     dial1.setSliderStyle(juce::Slider::RotaryVerticalDrag);
     dial1.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 20);
-    dial1.setRange(0.0, 10.0, 0.1);
-    //dial1.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colour(0xffae87b8));
+    dial1.setRange(0.0f, 15.0f, 0.1f);
     dial1.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, JUCEtestPluginAudioProcessorEditor::myColor1);
-    //dial1.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colour(0xfff8f5fa));
     dial1.setColour(juce::Slider::ColourIds::thumbColourId, JUCEtestPluginAudioProcessorEditor::myColor0);
-    dial1.setDoubleClickReturnValue(true, 0.0);
+    dial1.setDoubleClickReturnValue(true, 1.0f);
 }
-
-//void JUCEtestPluginAudioProcessorEditor::sliderValueChanged(juce::Slider* slider) {
-//	//if (slider == &dial1) {
-//	//	audioProcessor.gainLevel = dial1.getValue();
-//	//}
-//}
 
 // Button1 settings ------------------------------------------------------------
 auto buttonWidth = 80;
@@ -38,18 +30,10 @@ auto buttonHeight = 60;
 void JUCEtestPluginAudioProcessorEditor::initButton1() {
 	addAndMakeVisible(button1);
 	button1.setButtonText("This is a button");
-	//button1.setColour(juce::TextButton::ColourIds::buttonColourId, juce::Colour(0xff3e204b));
-    button1.setColour(juce::TextButton::ColourIds::buttonColourId, JUCEtestPluginAudioProcessorEditor::myColor4);
-	//button1.setColour(juce::TextButton::ColourIds::buttonOnColourId, juce::Colour(0xffa458a7));
-    button1.setColour(juce::TextButton::ColourIds::buttonOnColourId, JUCEtestPluginAudioProcessorEditor::myColor5);
+    button1.setColour(juce::TextButton::ColourIds::buttonColourId, JUCEtestPluginAudioProcessorEditor::myColor5);
+    button1.setColour(juce::TextButton::ColourIds::buttonOnColourId, JUCEtestPluginAudioProcessorEditor::myColor4);
 	button1.setClickingTogglesState(true);
 }
-
-//void JUCEtestPluginAudioProcessorEditor::buttonClicked(juce::Button* button) {
-//	//if (button == &button1) {
-//	//	audioProcessor.gainToggle = button1.getToggleState();
-//	//}
-//}
 
 //==============================================================================
 JUCEtestPluginAudioProcessorEditor::JUCEtestPluginAudioProcessorEditor (JUCEtestPluginAudioProcessor& p)
@@ -58,14 +42,21 @@ JUCEtestPluginAudioProcessorEditor::JUCEtestPluginAudioProcessorEditor (JUCEtest
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
 
+    // ValueTreeState attachments
+	dial1Attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+        audioProcessor.apvts, "GAINLEVEL", dial1);
+
+	button1Attachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
+		audioProcessor.apvts, "GAINTOGGLE", button1);
+
     // adding components
-	initButton1();	// adding button1
+    initButton1();	// adding button1
     initDial1();    // adding dial1
 
     // configuring the window
     setResizable(true, true);                       // enabling resizing via bottom right corner
-    getConstrainer()->setFixedAspectRatio(1.5);     // setting a fixed aspect ratio for the window
-    setResizeLimits(450, 300, 1800, 1200);          // setting min and max size of the window
+    getConstrainer()->setFixedAspectRatio(1.5f);     // setting a fixed aspect ratio for the window
+    setResizeLimits(450, 300, 1200, 800);          // setting min and max size of the window
     setSize (450, 300);                             // setting initial size of the window
 }
 
@@ -93,12 +84,12 @@ void JUCEtestPluginAudioProcessorEditor::resized()
     // subcomponents in your editor..
 
 	// button settings
-    auto buttonLeftBound = getWidth() * 0.5 + 20;
-	auto buttonTopBound = getHeight() * 0.5 - (buttonHeight * 0.5);
+    auto buttonLeftBound = (getWidth() * 0.5f) + 20;
+    auto buttonTopBound = (getHeight() * 0.5f) - (buttonHeight * 0.5f);
 
 	// dial settings:
-    auto dialLeftBound = getWidth() * 0.5 - dialWidth - 20;
-	auto dialTopBound = getHeight() * 0.5 - (dialHeight * 0.5);
+    auto dialLeftBound = (getWidth() * 0.5f) - dialWidth - 20;
+    auto dialTopBound = (getHeight() * 0.5f) - (dialHeight * 0.5f);
 
 
     // adding the button and dial

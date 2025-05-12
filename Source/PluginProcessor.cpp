@@ -136,6 +136,12 @@ void JUCEtestPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
+    
+    // get value of gainLevel and gainToggle from apvts
+    auto gainLevel = apvts.getRawParameterValue("GAINLEVEL");
+    auto* gainToggleParam = dynamic_cast<juce::AudioParameterBool*>(apvts.getParameter("GAINTOGGLE"));
+    gainLevel->load();
+    bool gainToggle = gainToggleParam->get();
 
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
@@ -157,14 +163,12 @@ void JUCEtestPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
         auto* channelData = buffer.getWritePointer (channel);
 
         // ..do something to the data...
-        //if (JUCEtestPluginAudioProcessor::gainToggle) {
-        //    for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
-        //    {
-        //        // Example: simple gain
-        //        //channelData[sample] *= 0.5f;
-        //        channelData[sample] *= JUCEtestPluginAudioProcessor::gainLevel;
-        //    }
-        //}
+        if (gainToggle) {
+            for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
+            {
+                channelData[sample] *= static_cast<float>(*gainLevel);
+            }
+        }
     }
 }
 
@@ -204,8 +208,8 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 juce::AudioProcessorValueTreeState::ParameterLayout JUCEtestPluginAudioProcessor::createParameters() {
     // create parameter vector & add gainLevel and gainToggle as parameters
 	std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
-	params.push_back(std::make_unique<juce::AudioParameterFloat>("gainLevel", "GainLevel", 0.0f, 10.0f, 1.0f));
-	params.push_back(std::make_unique<juce::AudioParameterBool>("gainToggle", "GainToggle", false));
+	params.push_back(std::make_unique<juce::AudioParameterFloat>("GAINLEVEL", "GainLevel", 0.0f, 15.0f, 1.0f));
+	params.push_back(std::make_unique<juce::AudioParameterBool>("GAINTOGGLE", "GainToggle", false));
 
 	return { params.begin(), params.end() };
 }

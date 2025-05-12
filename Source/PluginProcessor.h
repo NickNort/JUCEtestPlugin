@@ -54,10 +54,8 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     //==============================================================================
+    // for parameters like gain level and gain toggle
     juce::AudioProcessorValueTreeState apvts;
-
-    /*float gainLevel = 1.0f;
-    bool gainToggle = 0;*/
 
 private:
     juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
