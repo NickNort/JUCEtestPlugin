@@ -28,7 +28,7 @@ void JUCEtestPluginAudioProcessorEditor::initDial1() {
 auto buttonWidth = 80;
 auto buttonHeight = 60;
 void JUCEtestPluginAudioProcessorEditor::initButton1() {
-    button1.setButtonText("This is a button");
+    button1.setButtonText("Gain");
     button1.setColour(juce::TextButton::ColourIds::buttonColourId, JUCEtestPluginAudioProcessorEditor::myColor5);
     button1.setColour(juce::TextButton::ColourIds::buttonOnColourId, JUCEtestPluginAudioProcessorEditor::myColor4);
 	button1.setClickingTogglesState(true);
