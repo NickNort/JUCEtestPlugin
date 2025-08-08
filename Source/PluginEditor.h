@@ -10,18 +10,19 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "SpectrumAnalyzer.h"
 
 //==============================================================================
 /**
 */
-class JUCEtestPluginAudioProcessorEditor  : public juce::AudioProcessorEditor
+class JUCEtestPluginAudioProcessorEditor : public juce::AudioProcessorEditor
 {
 public:
-    JUCEtestPluginAudioProcessorEditor (JUCEtestPluginAudioProcessor&);
+    JUCEtestPluginAudioProcessorEditor(JUCEtestPluginAudioProcessor&);
     ~JUCEtestPluginAudioProcessorEditor() override;
 
     //==============================================================================
-    void paint (juce::Graphics&) override;
+    void paint(juce::Graphics&) override;
     void resized() override;
 
 private:
@@ -44,11 +45,14 @@ private:
     juce::TextButton button1;
     void initButton1();
 
+    // Spectrum Analyzer
+    SpectrumAnalyzer spectrumAnalyzer;
+
     // note about C++: apparently when classes are created, they are created in order from
     // first line to last but when they are destroyed, they are destroyed in reverse order,
     // so this needs to be declared after the dial so that the dial is not destroyed first.
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> dial1Attachment;
-	std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> button1Attachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> button1Attachment;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (JUCEtestPluginAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(JUCEtestPluginAudioProcessorEditor)
 };
