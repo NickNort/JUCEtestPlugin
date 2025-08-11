@@ -29,30 +29,77 @@ void SpectrumAnalyzer::paint(juce::Graphics& g)
 {
     g.fillAll(juce::Colour(0xff1a1a1a)); // Dark background
 
-    // Draw frequency grid lines
+    // Draw frequency grid lines and labels
     g.setColour(juce::Colour(0xff333333));
 
-    // Vertical frequency lines (octaves)
-    const float freqs[] = { 100.0f, 200.0f, 500.0f, 1000.0f, 2000.0f, 5000.0f, 10000.0f };
+    // Vertical frequency lines (logarithmic spacing for better visualization)
+    const float freqs[] = { 20.0f, 50.0f, 100.0f, 200.0f, 500.0f, 1000.0f, 2000.0f, 5000.0f, 10000.0f, 20000.0f };
     const float sampleRate = 44100.0f; // Assume 44.1kHz
-    const float binWidth = sampleRate / fftSize;
+    const float nyquist = sampleRate / 2.0f; // Maximum displayable frequency
 
     for (auto freq : freqs)
     {
-        float bin = freq / binWidth;
-        float x = juce::jmap(bin, 0.0f, (float)scopeSize, 0.0f, (float)getWidth());
-        if (x >= 0 && x <= getWidth())
+        if (freq <= nyquist) // Only draw frequencies within Nyquist limit
         {
-            g.drawVerticalLine(juce::roundToInt(x), 0.0f, (float)getHeight());
+            // Enhanced logarithmic mapping that spreads out low frequencies more
+            float normalizedFreq = freq / nyquist;
+            // Use a more aggressive logarithmic curve for better low-frequency spacing
+            float logNormalizedFreq = std::log(normalizedFreq * 19.0f + 1.0f) / std::log(20.0f);
+            float x = juce::jmap(logNormalizedFreq, 0.0f, 1.0f, 0.0f, (float)getWidth());
+            
+            if (x >= 0 && x <= getWidth())
+            {
+                g.drawVerticalLine(juce::roundToInt(x), 0.0f, (float)getHeight());
+                
+                // Add frequency labels
+                g.setColour(juce::Colour(0xff888888));
+                g.setFont(juce::Font(10.0f));
+                
+                juce::String labelText;
+                if (freq >= 1000.0f)
+                    labelText = juce::String(freq / 1000.0f, 1) + "k";
+                else
+                    labelText = juce::String((int)freq);
+                
+                // Draw label at bottom
+                g.drawText(labelText, 
+                          juce::roundToInt(x) - 15, getHeight() - 20, 
+                          30, 15, 
+                          juce::Justification::centred);
+            }
         }
     }
 
-    // Horizontal amplitude lines
-    for (int i = 1; i < 6; ++i)
+    // Horizontal amplitude lines and labels
+    g.setColour(juce::Colour(0xff333333));
+    const float dbValues[] = { -60.0f, -40.0f, -20.0f, 0.0f };
+    
+    for (auto dbValue : dbValues)
     {
-        float y = juce::jmap((float)i, 0.0f, 6.0f, (float)getHeight(), 0.0f);
-        g.drawHorizontalLine(juce::roundToInt(y), 0.0f, (float)getWidth());
+        // Map dB to screen position (assuming -60dB to 0dB range)
+        float normalizedValue = juce::jmap(dbValue, -60.0f, 0.0f, 0.0f, 1.0f);
+        float y = juce::jmap(normalizedValue, 0.0f, 1.0f, (float)getHeight(), 0.0f);
+        
+        if (y >= 0 && y <= getHeight())
+        {
+            g.drawHorizontalLine(juce::roundToInt(y), 0.0f, (float)getWidth());
+            
+            // Add amplitude labels
+            g.setColour(juce::Colour(0xff888888));
+            g.setFont(juce::Font(10.0f));
+            
+            juce::String labelText = juce::String((int)dbValue) + "dB";
+            
+            // Draw label on the left side
+            g.drawText(labelText, 
+                      5, juce::roundToInt(y) - 7, 
+                      30, 15, 
+                      juce::Justification::centredLeft);
+        }
     }
+
+    // Reset color for grid lines
+    g.setColour(juce::Colour(0xff333333));
 
     drawFrame(g);
 }
@@ -138,8 +185,12 @@ void SpectrumAnalyzer::drawNextFrameOfSpectrum()
 
     for (int i = 0; i < scopeSize; ++i)
     {
-        auto skewedProportionX = 1.0f - std::exp(std::log(1.0f - (float)i / (float)scopeSize) * 0.2f);
-        auto fftDataIndex = juce::jlimit(0, fftSize / 2, (int)(skewedProportionX * (float)fftSize * 0.5f));
+        // Enhanced logarithmic frequency mapping that spreads out low frequencies
+        auto logPosition = (float)i / (float)scopeSize;
+        // Use matching logarithmic curve - inverse of the paint method
+        auto frequency = (std::pow(20.0f, logPosition) - 1.0f) / 19.0f;
+        
+        auto fftDataIndex = juce::jlimit(0, fftSize / 2, (int)(frequency * (float)fftSize * 0.5f));
 
         auto level = juce::jmap(juce::jlimit(mindB, maxdB,
             juce::Decibels::gainToDecibels(fftData[fftDataIndex]) -
