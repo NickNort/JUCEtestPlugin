@@ -4,6 +4,10 @@
               addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" headerPath="..\..\..\..\JUCE\modules\juce_audio_devices\asio&#10;">
   <MAINGROUP id="DcaFCh" name="JUCEtestPlugin">
     <GROUP id="{136DA9F7-0300-6169-79B9-30E69A614672}" name="Source">
+      <FILE id="Bw0jJm" name="SpectrumAnalyzer.cpp" compile="1" resource="0"
+            file="Source/SpectrumAnalyzer.cpp"/>
+      <FILE id="wnabgG" name="SpectrumAnalyzer.h" compile="0" resource="0"
+            file="Source/SpectrumAnalyzer.h"/>
       <FILE id="IilBtb" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="nq1e04" name="PluginProcessor.h" compile="0" resource="0"
