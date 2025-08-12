@@ -1,9 +1,7 @@
 # Nick's Test Guitar Plugin
 
-I want to learn about Guitar Plugins, DSP, and C++, so I'm making a dummy guitar plugin using JUCE just to see how it's done.
+I want to learn about Guitar Plugins, DSP, and C++, so I'm making a guitar plugin using JUCE just to see how it's done.
 
-The idea is that I will make an actual one later.
+Here is what it looks like thus far (08/11/2025):
 
-Here is what it looks like thus far (05/12/2025):
-
-![image](https://github.com/user-attachments/assets/616f01da-8e08-4a04-8a25-62d8c8038435)
+<img width="746" height="527" alt="image" src="https://github.com/user-attachments/assets/678f79a3-75cc-4419-9f07-808bef9614c9" />
