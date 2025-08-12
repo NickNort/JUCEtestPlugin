@@ -67,13 +67,6 @@ public:
 private:
     juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
 
-    // for spectral analysis
-    const size_t fftOrder = 11;            // 2^11 (2048)
-    const size_t fftSize = 1 << fftOrder;
-
-    juce::dsp::FFT forwardFFT{ static_cast<int>(fftOrder) };
-    juce::dsp::WindowingFunction<float> window{ fftSize, juce::dsp::WindowingFunction<float>::hann };
-
     // Pointer to spectrum analyzer for sending audio data
     SpectrumAnalyzer* spectrumAnalyzer = nullptr;
 

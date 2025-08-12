@@ -24,6 +24,10 @@ public:
     void pushNextSampleIntoFifo(float sample) noexcept;
     void drawNextFrameOfSpectrum();
     void drawFrame(juce::Graphics& g);
+    
+    // Method to set the current sample rate
+    void setSampleRate(double newSampleRate) { sampleRate = newSampleRate; }
+	float getSampleRate() const { return sampleRate; }
 
 private:
     void timerCallback() override;
@@ -44,6 +48,8 @@ private:
     // Smoothing for visual appeal
     float smoothedScopeData[scopeSize];
     static constexpr float smoothingFactor = 0.2f;
+    
+    double sampleRate = 44100.0; // Default to 44.1k
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SpectrumAnalyzer)
 };

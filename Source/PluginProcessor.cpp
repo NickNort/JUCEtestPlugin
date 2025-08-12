@@ -96,7 +96,7 @@ void JUCEtestPluginAudioProcessor::changeProgramName(int index, const juce::Stri
 //==============================================================================
 void JUCEtestPluginAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playbook
+    // Use this method as the place to do any pre-playback
     // initialisation that you need..
 }
 
@@ -143,6 +143,11 @@ void JUCEtestPluginAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer
     auto* gainToggleParam = dynamic_cast<juce::AudioParameterBool*>(apvts.getParameter("GAINTOGGLE"));
     gainLevel->load();
     bool gainToggle = gainToggleParam->get();
+
+    // set sample rate for spectrum analyzer
+    if (spectrumAnalyzer != nullptr && spectrumAnalyzer->getSampleRate() != getSampleRate()) {
+        spectrumAnalyzer->setSampleRate(getSampleRate());
+    }
 
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't

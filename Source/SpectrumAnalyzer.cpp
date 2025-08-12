@@ -34,7 +34,6 @@ void SpectrumAnalyzer::paint(juce::Graphics& g)
 
     // Vertical frequency lines (logarithmic spacing for better visualization)
     const float freqs[] = { 20.0f, 50.0f, 100.0f, 200.0f, 500.0f, 1000.0f, 2000.0f, 5000.0f, 10000.0f, 20000.0f };
-    const float sampleRate = 44100.0f; // Assume 44.1kHz
     const float nyquist = sampleRate / 2.0f; // Maximum displayable frequency
 
     for (auto freq : freqs)
