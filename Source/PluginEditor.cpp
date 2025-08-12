@@ -19,7 +19,7 @@ void JUCEtestPluginAudioProcessorEditor::initDial1() {
     dial1.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 20);
     dial1.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, JUCEtestPluginAudioProcessorEditor::myColor1);
     dial1.setColour(juce::Slider::ColourIds::thumbColourId, JUCEtestPluginAudioProcessorEditor::myColor0);
-    dial1.setRange(0.0f, 15.0f, 0.1f);
+    dial1.setRange(0.0f, 50.0f, 0.1f);
     dial1.setDoubleClickReturnValue(true, 1.0f);
     addAndMakeVisible(dial1);
 }
@@ -31,49 +31,57 @@ void JUCEtestPluginAudioProcessorEditor::initButton1() {
     button1.setButtonText("Gain");
     button1.setColour(juce::TextButton::ColourIds::buttonColourId, JUCEtestPluginAudioProcessorEditor::myColor5);
     button1.setColour(juce::TextButton::ColourIds::buttonOnColourId, JUCEtestPluginAudioProcessorEditor::myColor4);
-	button1.setClickingTogglesState(true);
-	addAndMakeVisible(button1);
+    button1.setClickingTogglesState(true);
+    addAndMakeVisible(button1);
 }
 
 //==============================================================================
-JUCEtestPluginAudioProcessorEditor::JUCEtestPluginAudioProcessorEditor (JUCEtestPluginAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+JUCEtestPluginAudioProcessorEditor::JUCEtestPluginAudioProcessorEditor(JUCEtestPluginAudioProcessor& p)
+    : AudioProcessorEditor(&p), audioProcessor(p)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
 
     // ValueTreeState attachments
-	dial1Attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+    dial1Attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
         audioProcessor.apvts, "GAINLEVEL", dial1);
 
-	button1Attachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
-		audioProcessor.apvts, "GAINTOGGLE", button1);
+    button1Attachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
+        audioProcessor.apvts, "GAINTOGGLE", button1);
 
     // adding components
     initButton1();	// adding button1
     initDial1();    // adding dial1
 
+    // Add spectrum analyzer
+    addAndMakeVisible(spectrumAnalyzer);
+
+    // Register spectrum analyzer with processor for audio data
+    audioProcessor.setSpectrumAnalyzer(&spectrumAnalyzer);
+
     // configuring the window
     setResizable(true, true);                       // enabling resizing via bottom right corner
     getConstrainer()->setFixedAspectRatio(1.5f);     // setting a fixed aspect ratio for the window
-    setResizeLimits(450, 300, 900, 600);          // setting min and max size of the window
-    setSize (450, 300);                             // setting initial size of the window
+    setResizeLimits(600, 400, 1200, 800);          // setting min and max size for spectrum analyzer
+    setSize(600, 400);                             // setting initial size of the window
 }
 
 JUCEtestPluginAudioProcessorEditor::~JUCEtestPluginAudioProcessorEditor()
 {
+    // Unregister spectrum analyzer
+    audioProcessor.setSpectrumAnalyzer(nullptr);
 }
 
 //==============================================================================
-void JUCEtestPluginAudioProcessorEditor::paint (juce::Graphics& g)
+void JUCEtestPluginAudioProcessorEditor::paint(juce::Graphics& g)
 {
     // setting background color
     g.fillAll(JUCEtestPluginAudioProcessorEditor::myColor5);
 
     // setting color of the text
     g.setColour(JUCEtestPluginAudioProcessorEditor::myColor1);
-    g.setFont (juce::FontOptions (40.0f));
-    g.drawFittedText ("Nick\'s Test Plugin", getLocalBounds(), juce::Justification::centredTop, 1);
+    g.setFont(juce::FontOptions(40.0f));
+    g.drawFittedText("Nick\'s Test Plugin", getLocalBounds(), juce::Justification::centredTop, 1);
 }
 
 void JUCEtestPluginAudioProcessorEditor::resized()
@@ -81,16 +89,26 @@ void JUCEtestPluginAudioProcessorEditor::resized()
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
 
-	// button settings
-    auto buttonLeftBound = (getWidth() * 0.5f) + 20;
-    auto buttonTopBound = (getHeight() * 0.5f) - (buttonHeight * 0.5f);
+    auto bounds = getLocalBounds();
+    auto headerArea = bounds.removeFromTop(60); // Space for title
+    auto controlsArea = bounds.removeFromBottom(120); // Space for controls at bottom
+    auto spectrumArea = bounds; // Remaining space for spectrum
 
-	// dial settings:
-    auto dialLeftBound = (getWidth() * 0.5f) - dialWidth - 20;
-    auto dialTopBound = (getHeight() * 0.5f) - (dialHeight * 0.5f);
+    // Spectrum analyzer takes the main area
+    spectrumAnalyzer.setBounds(spectrumArea.reduced(10));
 
+    // Controls at the bottom
+    auto controlsCentered = controlsArea.withSizeKeepingCentre(200, 100);
 
-    // adding the button and dial
-    button1.setBounds(buttonLeftBound, buttonTopBound, buttonWidth, buttonHeight);
-    dial1.setBounds(dialLeftBound, dialTopBound, dialWidth, dialHeight);
+    // button settings
+    auto buttonBounds = controlsCentered.removeFromRight(100);
+    buttonBounds = buttonBounds.withSizeKeepingCentre(buttonWidth, buttonHeight);
+
+    // dial settings:
+    auto dialBounds = controlsCentered.removeFromLeft(100);
+    dialBounds = dialBounds.withSizeKeepingCentre(dialWidth, dialHeight);
+
+    // Set component bounds
+    button1.setBounds(buttonBounds);
+    dial1.setBounds(dialBounds);
 }

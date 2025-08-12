@@ -9,11 +9,15 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include <juce_dsp/juce_dsp.h>
+
+// Forward declaration
+class SpectrumAnalyzer;
 
 //==============================================================================
 /**
 */
-class JUCEtestPluginAudioProcessor  : public juce::AudioProcessor
+class JUCEtestPluginAudioProcessor : public juce::AudioProcessor
 {
 public:
     //==============================================================================
@@ -21,14 +25,14 @@ public:
     ~JUCEtestPluginAudioProcessor() override;
 
     //==============================================================================
-    void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+    void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-   #ifndef JucePlugin_PreferredChannelConfigurations
-    bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
-   #endif
+#ifndef JucePlugin_PreferredChannelConfigurations
+    bool isBusesLayoutSupported(const BusesLayout& layouts) const override;
+#endif
 
-    void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
+    void processBlock(juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
 
     //==============================================================================
     juce::AudioProcessorEditor* createEditor() override;
@@ -45,21 +49,27 @@ public:
     //==============================================================================
     int getNumPrograms() override;
     int getCurrentProgram() override;
-    void setCurrentProgram (int index) override;
-    const juce::String getProgramName (int index) override;
-    void changeProgramName (int index, const juce::String& newName) override;
+    void setCurrentProgram(int index) override;
+    const juce::String getProgramName(int index) override;
+    void changeProgramName(int index, const juce::String& newName) override;
 
     //==============================================================================
-    void getStateInformation (juce::MemoryBlock& destData) override;
-    void setStateInformation (const void* data, int sizeInBytes) override;
+    void getStateInformation(juce::MemoryBlock& destData) override;
+    void setStateInformation(const void* data, int sizeInBytes) override;
 
     //==============================================================================
     // for parameters like gain level and gain toggle
     juce::AudioProcessorValueTreeState apvts;
 
+    // Method to register spectrum analyzer
+    void setSpectrumAnalyzer(SpectrumAnalyzer* analyzer) { spectrumAnalyzer = analyzer; }
+
 private:
     juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
 
+    // Pointer to spectrum analyzer for sending audio data
+    SpectrumAnalyzer* spectrumAnalyzer = nullptr;
+
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (JUCEtestPluginAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(JUCEtestPluginAudioProcessor)
 };
