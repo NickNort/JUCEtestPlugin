@@ -182,12 +182,15 @@ void SpectrumAnalyzer::drawNextFrameOfSpectrum()
     auto mindB = -100.0f;
     auto maxdB = 0.0f;
 
+    auto logFreqBase = 20.0f;
+    auto logFreqDivisor = 19.0f;
+
     for (int i = 0; i < scopeSize; ++i)
     {
         // Enhanced logarithmic frequency mapping that spreads out low frequencies
         auto logPosition = (float)i / (float)scopeSize;
         // Use matching logarithmic curve - inverse of the paint method
-        auto frequency = (std::pow(20.0f, logPosition) - 1.0f) / 19.0f;
+        auto frequency = (std::pow(logFreqBase, logPosition) - 1.0f) / logFreqDivisor;
         
         auto fftDataIndex = juce::jlimit(0, fftSize / 2, (int)(frequency * (float)fftSize * 0.5f));
 
