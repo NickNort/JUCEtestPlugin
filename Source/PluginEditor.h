@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "SpectrumAnalyzer.h"
+#include "WaveformDisplay.h"
 
 //==============================================================================
 /**
@@ -47,6 +48,9 @@ private:
 
     // Spectrum Analyzer
     SpectrumAnalyzer spectrumAnalyzer;
+
+    // Waveform display
+    std::unique_ptr<WaveformDisplay> waveformDisplay;
 
     // note about C++: apparently when classes are created, they are created in order from
     // first line to last but when they are destroyed, they are destroyed in reverse order,

@@ -8,6 +8,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "WaveformDisplay.h"
 
 //==============================================================================
 
@@ -59,6 +60,10 @@ JUCEtestPluginAudioProcessorEditor::JUCEtestPluginAudioProcessorEditor(JUCEtestP
     // Register spectrum analyzer with processor for audio data
     audioProcessor.setSpectrumAnalyzer(&spectrumAnalyzer);
 
+    // Add waveform display
+    waveformDisplay = std::make_unique<WaveformDisplay>(audioProcessor);
+    addAndMakeVisible(*waveformDisplay);
+
     // configuring the window
     setResizable(true, true);                       // enabling resizing via bottom right corner
     getConstrainer()->setFixedAspectRatio(1.5f);     // setting a fixed aspect ratio for the window
@@ -70,6 +75,7 @@ JUCEtestPluginAudioProcessorEditor::~JUCEtestPluginAudioProcessorEditor()
 {
     // Unregister spectrum analyzer
     audioProcessor.setSpectrumAnalyzer(nullptr);
+    waveformDisplay.reset();
 }
 
 //==============================================================================
@@ -92,10 +98,11 @@ void JUCEtestPluginAudioProcessorEditor::resized()
     auto bounds = getLocalBounds();
     auto headerArea = bounds.removeFromTop(60); // Space for title
     auto controlsArea = bounds.removeFromBottom(120); // Space for controls at bottom
-    auto spectrumArea = bounds; // Remaining space for spectrum
+    auto spectrumArea = bounds.removeFromBottom(bounds.getHeight() / 2); // Half for spectrum
+    auto waveformArea = bounds; // Remaining half for waveform
 
-    // Spectrum analyzer takes the main area
     spectrumAnalyzer.setBounds(spectrumArea.reduced(10));
+    waveformDisplay->setBounds(waveformArea.reduced(10));
 
     // Controls at the bottom
     auto controlsCentered = controlsArea.withSizeKeepingCentre(200, 100);

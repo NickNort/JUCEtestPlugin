@@ -10,6 +10,9 @@
 
 #include <JuceHeader.h>
 #include <juce_dsp/juce_dsp.h>
+#include <atomic>
+#include <vector>
+#include "WaveformDisplay.h"
 
 // Forward declaration
 class SpectrumAnalyzer;
@@ -63,12 +66,23 @@ public:
 
     // Method to register spectrum analyzer
     void setSpectrumAnalyzer(SpectrumAnalyzer* analyzer) { spectrumAnalyzer = analyzer; }
+	// Method to analyze waveform shape
+	void analyzeWaveformShape(const juce::AudioBuffer<float>& buffer);
+    // Waveform circular buffer API
+    void pushWaveformSamples(const float* samples, int numSamples);
+    void getLatestWaveformSamples(std::vector<float>& dest, int numSamples);
 
 private:
     juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
 
     // Pointer to spectrum analyzer for sending audio data
     SpectrumAnalyzer* spectrumAnalyzer = nullptr;
+
+    // Waveform circular buffer members
+    std::vector<float> waveformBuffer;
+    std::unique_ptr<juce::AbstractFifo> waveformFifo;
+    std::mutex waveformMutex;
+    int waveformBufferSize = 8192; // ~200ms at 44.1kHz
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(JUCEtestPluginAudioProcessor)

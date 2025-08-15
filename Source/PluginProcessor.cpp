@@ -25,6 +25,8 @@ JUCEtestPluginAudioProcessor::JUCEtestPluginAudioProcessor()
 #endif
     apvts(*this, nullptr, "Parameters", createParameters())
 {
+    waveformBuffer.resize(waveformBufferSize, 0.0f);
+    waveformFifo = std::make_unique<juce::AbstractFifo>(waveformBufferSize);
 }
 
 JUCEtestPluginAudioProcessor::~JUCEtestPluginAudioProcessor()
@@ -185,6 +187,10 @@ void JUCEtestPluginAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer
             }
         }
     }
+
+    // After processing, push samples from first input channel to waveform buffer
+    if (totalNumInputChannels > 0)
+        pushWaveformSamples(buffer.getReadPointer(0), buffer.getNumSamples());
 }
 
 //==============================================================================
@@ -227,4 +233,31 @@ juce::AudioProcessorValueTreeState::ParameterLayout JUCEtestPluginAudioProcessor
     params.push_back(std::make_unique<juce::AudioParameterBool>("GAINTOGGLE", "GainToggle", false));
 
     return { params.begin(), params.end() };
+}
+
+void JUCEtestPluginAudioProcessor::pushWaveformSamples(const float* samples, int numSamples)
+{
+    std::lock_guard<std::mutex> lock(waveformMutex);
+    int start1, size1, start2, size2;
+    waveformFifo->prepareToWrite(numSamples, start1, size1, start2, size2);
+    if (size1 > 0)
+        std::copy(samples, samples + size1, waveformBuffer.begin() + start1);
+    if (size2 > 0)
+        std::copy(samples + size1, samples + size1 + size2, waveformBuffer.begin() + start2);
+    waveformFifo->finishedWrite(size1 + size2);
+}
+
+void JUCEtestPluginAudioProcessor::getLatestWaveformSamples(std::vector<float>& dest, int numSamples)
+{
+    std::lock_guard<std::mutex> lock(waveformMutex);
+    int available = waveformFifo->getNumReady();
+    int toRead = std::min(numSamples, available);
+    dest.resize(toRead);
+    int start1, size1, start2, size2;
+    waveformFifo->prepareToRead(toRead, start1, size1, start2, size2);
+    if (size1 > 0)
+        std::copy(waveformBuffer.begin() + start1, waveformBuffer.begin() + start1 + size1, dest.begin());
+    if (size2 > 0)
+        std::copy(waveformBuffer.begin() + start2, waveformBuffer.begin() + start2 + size2, dest.begin() + size1);
+    waveformFifo->finishedRead(size1 + size2);
 }
