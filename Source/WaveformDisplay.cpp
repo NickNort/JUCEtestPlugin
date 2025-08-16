@@ -5,7 +5,7 @@ WaveformDisplay::WaveformDisplay(JUCEtestPluginAudioProcessor& processor)
     : audioProcessor(processor)
 {
     setOpaque(true);
-    startTimerHz(60); // ~60 FPS
+    startTimerHz(30); // ~30 FPS
 }
 
 WaveformDisplay::~WaveformDisplay() {}
@@ -24,11 +24,14 @@ void WaveformDisplay::paint(juce::Graphics& g)
     float xStep = (float)w / (float)waveformBuffer.size();
 
     juce::Path path;
-    path.startNewSubPath(0, midY - waveformBuffer[0] * midY);
+    // Clamp the first sample
+    float firstSample = juce::jlimit(-1.0f, 1.0f, waveformBuffer[0]);
+    path.startNewSubPath(0, midY - firstSample * midY);
     for (size_t i = 1; i < waveformBuffer.size(); ++i)
     {
         float x = (float)i * xStep;
-        float y = midY - waveformBuffer[i] * midY;
+        // Clamp each sample to [-1.0, 1.0]
+        float y = midY - juce::jlimit(-1.0f, 1.0f, waveformBuffer[i]) * midY;
         path.lineTo(x, y);
     }
     g.strokePath(path, juce::PathStrokeType(2.0f));
