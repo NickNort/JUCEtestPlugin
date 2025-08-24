@@ -12,7 +12,7 @@ SpectrumAnalyzer::SpectrumAnalyzer()
     : forwardFFT(fftOrder), window(fftSize, juce::dsp::WindowingFunction<float>::hann)
 {
     setOpaque(false);
-    startTimerHz(30); // 30 FPS refresh rate
+    startTimerHz(60); // 60 FPS refresh rate
 
     // Initialize arrays
     std::fill(std::begin(fifo), std::end(fifo), 0.0f);
@@ -36,6 +36,10 @@ void SpectrumAnalyzer::paint(juce::Graphics& g)
     const float freqs[] = { 20.0f, 50.0f, 100.0f, 200.0f, 500.0f, 1000.0f, 2000.0f, 5000.0f, 10000.0f, 20000.0f };
     const float nyquist = sampleRate / 2.0f; // Maximum displayable frequency
 
+    const float logFreqBase = 80.0f; // Increased base for more spread
+    const float logFreqDivisor = 79.0f;
+    //const float logFreqDivisor = logFreqBase - 1.0f; // base - 1
+
     for (auto freq : freqs)
     {
         if (freq <= nyquist) // Only draw frequencies within Nyquist limit
@@ -43,7 +47,7 @@ void SpectrumAnalyzer::paint(juce::Graphics& g)
             // Enhanced logarithmic mapping that spreads out low frequencies more
             float normalizedFreq = freq / nyquist;
             // Use a more aggressive logarithmic curve for better low-frequency spacing
-            float logNormalizedFreq = std::log(normalizedFreq * 19.0f + 1.0f) / std::log(20.0f);
+            float logNormalizedFreq = std::log(normalizedFreq * logFreqDivisor + 1.0f) / std::log(logFreqBase);
             float x = juce::jmap(logNormalizedFreq, 0.0f, 1.0f, 0.0f, (float)getWidth());
             
             if (x >= 0 && x <= getWidth())
@@ -182,8 +186,9 @@ void SpectrumAnalyzer::drawNextFrameOfSpectrum()
     auto mindB = -100.0f;
     auto maxdB = 0.0f;
 
-    auto logFreqBase = 20.0f;
-    auto logFreqDivisor = 19.0f;
+    const float logFreqBase = 80.0f;
+    const float logFreqDivisor = 79.0f;
+    //const float logFreqDivisor = logFreqBase - 1.0f;
 
     for (int i = 0; i < scopeSize; ++i)
     {

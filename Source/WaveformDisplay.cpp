@@ -5,7 +5,7 @@ WaveformDisplay::WaveformDisplay(JUCEtestPluginAudioProcessor& processor)
     : audioProcessor(processor)
 {
     setOpaque(true);
-    startTimerHz(30); // ~30 FPS
+    startTimerHz(60); // ~60 FPS
 }
 
 WaveformDisplay::~WaveformDisplay() {}
