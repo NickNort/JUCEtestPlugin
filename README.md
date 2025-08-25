@@ -1,4 +1,4 @@
-# Nick's Test Guitar Plugin
+# Nick's Guitar Plugin
 
 I want to learn about Guitar Plugins, DSP, and C++, so I'm making a guitar plugin using JUCE just to see how it's done.
 
