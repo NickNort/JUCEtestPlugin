@@ -11,7 +11,7 @@
 #include "SpectrumAnalyzer.h"
 
 //==============================================================================
-JUCEtestPluginAudioProcessor::JUCEtestPluginAudioProcessor()
+NickPluginAudioProcessor::NickPluginAudioProcessor()
     :
 #ifndef JucePlugin_PreferredChannelConfigurations
     AudioProcessor(BusesProperties()
@@ -29,17 +29,17 @@ JUCEtestPluginAudioProcessor::JUCEtestPluginAudioProcessor()
     waveformFifo = std::make_unique<juce::AbstractFifo>(waveformBufferSize);
 }
 
-JUCEtestPluginAudioProcessor::~JUCEtestPluginAudioProcessor()
+NickPluginAudioProcessor::~NickPluginAudioProcessor()
 {
 }
 
 //==============================================================================
-const juce::String JUCEtestPluginAudioProcessor::getName() const
+const juce::String NickPluginAudioProcessor::getName() const
 {
     return JucePlugin_Name;
 }
 
-bool JUCEtestPluginAudioProcessor::acceptsMidi() const
+bool NickPluginAudioProcessor::acceptsMidi() const
 {
 #if JucePlugin_WantsMidiInput
     return true;
@@ -48,7 +48,7 @@ bool JUCEtestPluginAudioProcessor::acceptsMidi() const
 #endif
 }
 
-bool JUCEtestPluginAudioProcessor::producesMidi() const
+bool NickPluginAudioProcessor::producesMidi() const
 {
 #if JucePlugin_ProducesMidiOutput
     return true;
@@ -57,7 +57,7 @@ bool JUCEtestPluginAudioProcessor::producesMidi() const
 #endif
 }
 
-bool JUCEtestPluginAudioProcessor::isMidiEffect() const
+bool NickPluginAudioProcessor::isMidiEffect() const
 {
 #if JucePlugin_IsMidiEffect
     return true;
@@ -66,50 +66,50 @@ bool JUCEtestPluginAudioProcessor::isMidiEffect() const
 #endif
 }
 
-double JUCEtestPluginAudioProcessor::getTailLengthSeconds() const
+double NickPluginAudioProcessor::getTailLengthSeconds() const
 {
     return 0.0;
 }
 
-int JUCEtestPluginAudioProcessor::getNumPrograms()
+int NickPluginAudioProcessor::getNumPrograms()
 {
     return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
     // so this should be at least 1, even if you're not really implementing programs.
 }
 
-int JUCEtestPluginAudioProcessor::getCurrentProgram()
+int NickPluginAudioProcessor::getCurrentProgram()
 {
     return 0;
 }
 
-void JUCEtestPluginAudioProcessor::setCurrentProgram(int index)
+void NickPluginAudioProcessor::setCurrentProgram(int index)
 {
 }
 
-const juce::String JUCEtestPluginAudioProcessor::getProgramName(int index)
+const juce::String NickPluginAudioProcessor::getProgramName(int index)
 {
     return {};
 }
 
-void JUCEtestPluginAudioProcessor::changeProgramName(int index, const juce::String& newName)
+void NickPluginAudioProcessor::changeProgramName(int index, const juce::String& newName)
 {
 }
 
 //==============================================================================
-void JUCEtestPluginAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
+void NickPluginAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
 }
 
-void JUCEtestPluginAudioProcessor::releaseResources()
+void NickPluginAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
-bool JUCEtestPluginAudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
+bool NickPluginAudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
 {
 #if JucePlugin_IsMidiEffect
     juce::ignoreUnused(layouts);
@@ -134,7 +134,7 @@ bool JUCEtestPluginAudioProcessor::isBusesLayoutSupported(const BusesLayout& lay
 }
 #endif
 
-void JUCEtestPluginAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
+void NickPluginAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels = getTotalNumInputChannels();
@@ -194,25 +194,25 @@ void JUCEtestPluginAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer
 }
 
 //==============================================================================
-bool JUCEtestPluginAudioProcessor::hasEditor() const
+bool NickPluginAudioProcessor::hasEditor() const
 {
     return true; // (change this to false if you choose to not supply an editor)
 }
 
-juce::AudioProcessorEditor* JUCEtestPluginAudioProcessor::createEditor()
+juce::AudioProcessorEditor* NickPluginAudioProcessor::createEditor()
 {
-    return new JUCEtestPluginAudioProcessorEditor(*this);
+    return new NickPluginAudioProcessorEditor(*this);
 }
 
 //==============================================================================
-void JUCEtestPluginAudioProcessor::getStateInformation(juce::MemoryBlock& destData)
+void NickPluginAudioProcessor::getStateInformation(juce::MemoryBlock& destData)
 {
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
 }
 
-void JUCEtestPluginAudioProcessor::setStateInformation(const void* data, int sizeInBytes)
+void NickPluginAudioProcessor::setStateInformation(const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
@@ -222,11 +222,11 @@ void JUCEtestPluginAudioProcessor::setStateInformation(const void* data, int siz
 // This creates new instances of the plugin..
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
-    return new JUCEtestPluginAudioProcessor();
+    return new NickPluginAudioProcessor();
 }
 
 //==============================================================================
-juce::AudioProcessorValueTreeState::ParameterLayout JUCEtestPluginAudioProcessor::createParameters() {
+juce::AudioProcessorValueTreeState::ParameterLayout NickPluginAudioProcessor::createParameters() {
     // create parameter vector & add gainLevel and gainToggle as parameters
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
     params.push_back(std::make_unique<juce::AudioParameterFloat>("GAINLEVEL", "GainLevel", 0.0f, 50.0f, 1.0f));
@@ -235,7 +235,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout JUCEtestPluginAudioProcessor
     return { params.begin(), params.end() };
 }
 
-void JUCEtestPluginAudioProcessor::pushWaveformSamples(const float* samples, int numSamples)
+void NickPluginAudioProcessor::pushWaveformSamples(const float* samples, int numSamples)
 {
     std::lock_guard<std::mutex> lock(waveformMutex);
     int start1, size1, start2, size2;
@@ -247,7 +247,7 @@ void JUCEtestPluginAudioProcessor::pushWaveformSamples(const float* samples, int
     waveformFifo->finishedWrite(size1 + size2);
 }
 
-void JUCEtestPluginAudioProcessor::getLatestWaveformSamples(std::vector<float>& dest, int numSamples)
+void NickPluginAudioProcessor::getLatestWaveformSamples(std::vector<float>& dest, int numSamples)
 {
     std::lock_guard<std::mutex> lock(waveformMutex);
     int available = waveformFifo->getNumReady();

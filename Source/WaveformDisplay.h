@@ -1,12 +1,12 @@
 #pragma once
 #include <JuceHeader.h>
 
-class JUCEtestPluginAudioProcessor;
+class NickPluginAudioProcessor;
 
 class WaveformDisplay : public juce::Component, private juce::Timer
 {
 public:
-    WaveformDisplay(JUCEtestPluginAudioProcessor& processor);
+    WaveformDisplay(NickPluginAudioProcessor& processor);
     ~WaveformDisplay() override;
 
     void paint(juce::Graphics&) override;
@@ -16,7 +16,7 @@ private:
     void timerCallback() override;
     void updateWaveform();
 
-    JUCEtestPluginAudioProcessor& audioProcessor;
+    NickPluginAudioProcessor& audioProcessor;
     std::vector<float> waveformBuffer;
     int numSamplesToDraw = 1024; // Number of samples to display
     juce::Colour backgroundColour = juce::Colours::black;

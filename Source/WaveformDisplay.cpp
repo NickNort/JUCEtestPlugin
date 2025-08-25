@@ -1,7 +1,7 @@
 #include "WaveformDisplay.h"
 #include "PluginProcessor.h"
 
-WaveformDisplay::WaveformDisplay(JUCEtestPluginAudioProcessor& processor)
+WaveformDisplay::WaveformDisplay(NickPluginAudioProcessor& processor)
     : audioProcessor(processor)
 {
     setOpaque(true);

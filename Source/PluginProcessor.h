@@ -20,12 +20,12 @@ class SpectrumAnalyzer;
 //==============================================================================
 /**
 */
-class JUCEtestPluginAudioProcessor : public juce::AudioProcessor
+class NickPluginAudioProcessor : public juce::AudioProcessor
 {
 public:
     //==============================================================================
-    JUCEtestPluginAudioProcessor();
-    ~JUCEtestPluginAudioProcessor() override;
+    NickPluginAudioProcessor();
+    ~NickPluginAudioProcessor() override;
 
     //==============================================================================
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
@@ -85,5 +85,5 @@ private:
     int waveformBufferSize = 8192; // ~200ms at 44.1kHz
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(JUCEtestPluginAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(NickPluginAudioProcessor)
 };

@@ -15,11 +15,11 @@
 // Dial1 settings --------------------------------------------------------------
 const int dialWidth = 100;
 const int dialHeight = 100;
-void JUCEtestPluginAudioProcessorEditor::initDial1() {
+void NickPluginAudioProcessorEditor::initDial1() {
     dial1.setSliderStyle(juce::Slider::RotaryVerticalDrag);
     dial1.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 20);
-    dial1.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, JUCEtestPluginAudioProcessorEditor::myColor1);
-    dial1.setColour(juce::Slider::ColourIds::thumbColourId, JUCEtestPluginAudioProcessorEditor::myColor0);
+    dial1.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, NickPluginAudioProcessorEditor::myColor1);
+    dial1.setColour(juce::Slider::ColourIds::thumbColourId, NickPluginAudioProcessorEditor::myColor0);
     dial1.setRange(0.0f, 50.0f, 0.1f);
     dial1.setDoubleClickReturnValue(true, 1.0f);
     addAndMakeVisible(dial1);
@@ -28,16 +28,16 @@ void JUCEtestPluginAudioProcessorEditor::initDial1() {
 // Button1 settings ------------------------------------------------------------
 const int buttonWidth = 80;
 const int buttonHeight = 60;
-void JUCEtestPluginAudioProcessorEditor::initButton1() {
+void NickPluginAudioProcessorEditor::initButton1() {
     button1.setButtonText("Gain");
-    button1.setColour(juce::TextButton::ColourIds::buttonColourId, JUCEtestPluginAudioProcessorEditor::myColor5);
-    button1.setColour(juce::TextButton::ColourIds::buttonOnColourId, JUCEtestPluginAudioProcessorEditor::myColor4);
+    button1.setColour(juce::TextButton::ColourIds::buttonColourId, NickPluginAudioProcessorEditor::myColor5);
+    button1.setColour(juce::TextButton::ColourIds::buttonOnColourId, NickPluginAudioProcessorEditor::myColor4);
     button1.setClickingTogglesState(true);
     addAndMakeVisible(button1);
 }
 
 //==============================================================================
-JUCEtestPluginAudioProcessorEditor::JUCEtestPluginAudioProcessorEditor(JUCEtestPluginAudioProcessor& p)
+NickPluginAudioProcessorEditor::NickPluginAudioProcessorEditor(NickPluginAudioProcessor& p)
     : AudioProcessorEditor(&p), audioProcessor(p)
 {
     // Make sure that before the constructor has finished, you've set the
@@ -71,7 +71,7 @@ JUCEtestPluginAudioProcessorEditor::JUCEtestPluginAudioProcessorEditor(JUCEtestP
     setSize(600, 400);                             // setting initial size of the window
 }
 
-JUCEtestPluginAudioProcessorEditor::~JUCEtestPluginAudioProcessorEditor()
+NickPluginAudioProcessorEditor::~NickPluginAudioProcessorEditor()
 {
     // Unregister spectrum analyzer
     audioProcessor.setSpectrumAnalyzer(nullptr);
@@ -79,18 +79,18 @@ JUCEtestPluginAudioProcessorEditor::~JUCEtestPluginAudioProcessorEditor()
 }
 
 //==============================================================================
-void JUCEtestPluginAudioProcessorEditor::paint(juce::Graphics& g)
+void NickPluginAudioProcessorEditor::paint(juce::Graphics& g)
 {
     // setting background color
-    g.fillAll(JUCEtestPluginAudioProcessorEditor::myColor5);
+    g.fillAll(NickPluginAudioProcessorEditor::myColor5);
 
     // setting color of the text
-    g.setColour(JUCEtestPluginAudioProcessorEditor::myColor1);
+    g.setColour(NickPluginAudioProcessorEditor::myColor1);
     g.setFont(juce::FontOptions(40.0f));
-    g.drawFittedText("Nick\'s Test Plugin", getLocalBounds(), juce::Justification::centredTop, 1);
+    g.drawFittedText("NickPlugin", getLocalBounds(), juce::Justification::centredTop, 1);
 }
 
-void JUCEtestPluginAudioProcessorEditor::resized()
+void NickPluginAudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..

@@ -16,11 +16,11 @@
 //==============================================================================
 /**
 */
-class JUCEtestPluginAudioProcessorEditor : public juce::AudioProcessorEditor
+class NickPluginAudioProcessorEditor : public juce::AudioProcessorEditor
 {
 public:
-    JUCEtestPluginAudioProcessorEditor(JUCEtestPluginAudioProcessor&);
-    ~JUCEtestPluginAudioProcessorEditor() override;
+    NickPluginAudioProcessorEditor(NickPluginAudioProcessor&);
+    ~NickPluginAudioProcessorEditor() override;
 
     //==============================================================================
     void paint(juce::Graphics&) override;
@@ -29,7 +29,7 @@ public:
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
-    JUCEtestPluginAudioProcessor& audioProcessor;
+    NickPluginAudioProcessor& audioProcessor;
 
     // Color Palette:
     const juce::Colour myColor0 = juce::Colour(0xfffdf5ff); // for white-ish text & dial thumb
@@ -58,5 +58,5 @@ private:
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> dial1Attachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> button1Attachment;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(JUCEtestPluginAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(NickPluginAudioProcessorEditor)
 };

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="Lx0N2o" name="JUCEtestPlugin" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" headerPath="..\..\..\..\JUCE\modules\juce_audio_devices\asio&#10;">
-  <MAINGROUP id="DcaFCh" name="JUCEtestPlugin">
+<JUCERPROJECT id="Lx0N2o" name="NickPlugin" projectType="audioplug" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" headerPath="..\..\..\..\JUCE\modules\juce_audio_devices\asio&#10;"
+              companyName="NickNort" companyWebsite="https://github.com/NickNort/NickPlugin">
+  <MAINGROUP id="DcaFCh" name="NickPlugin">
     <GROUP id="{136DA9F7-0300-6169-79B9-30E69A614672}" name="Source">
       <FILE id="ShzL1K" name="WaveformDisplay.cpp" compile="1" resource="0"
             file="Source/WaveformDisplay.cpp"/>
