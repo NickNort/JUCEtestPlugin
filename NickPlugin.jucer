@@ -43,8 +43,8 @@
   <EXPORTFORMATS>
     <VS2022 targetFolder="Builds/VisualStudio2022">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="1" name="Debug" targetName="JUCEtestPlugin"/>
-        <CONFIGURATION isDebug="0" name="Release" targetName="JUCEtestPlugin"/>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="NickPlugin"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="NickPlugin"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_audio_basics" path="../../JUCE/modules"/>

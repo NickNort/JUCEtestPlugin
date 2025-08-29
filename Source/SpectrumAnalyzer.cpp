@@ -197,12 +197,40 @@ void SpectrumAnalyzer::drawNextFrameOfSpectrum()
         // Use matching logarithmic curve - inverse of the paint method
         auto frequency = (std::pow(logFreqBase, logPosition) - 1.0f) / logFreqDivisor;
         
-        auto fftDataIndex = juce::jlimit(0, fftSize / 2, (int)(frequency * (float)fftSize * 0.5f));
-
-        auto level = juce::jmap(juce::jlimit(mindB, maxdB,
-            juce::Decibels::gainToDecibels(fftData[fftDataIndex]) -
-            juce::Decibels::gainToDecibels((float)fftSize)),
-            mindB, maxdB, 0.0f, 1.0f);
+        // Calculate the exact floating-point FFT bin position
+        auto exactBinPosition = frequency * (float)fftSize * 0.5f;
+        auto fftDataIndex = juce::jlimit(0, fftSize / 2 - 1, (int)exactBinPosition);
+        
+        float level;
+        
+        // Use linear interpolation when we're between FFT bins to smooth the response
+        if (fftDataIndex < fftSize / 2 - 1 && exactBinPosition != (float)fftDataIndex)
+        {
+            // Get the fractional part for interpolation
+            auto fraction = exactBinPosition - (float)fftDataIndex;
+            
+            // Get levels from current and next FFT bins
+            auto level1 = juce::jmap(juce::jlimit(mindB, maxdB,
+                juce::Decibels::gainToDecibels(fftData[fftDataIndex]) -
+                juce::Decibels::gainToDecibels((float)fftSize)),
+                mindB, maxdB, 0.0f, 1.0f);
+                
+            auto level2 = juce::jmap(juce::jlimit(mindB, maxdB,
+                juce::Decibels::gainToDecibels(fftData[fftDataIndex + 1]) -
+                juce::Decibels::gainToDecibels((float)fftSize)),
+                mindB, maxdB, 0.0f, 1.0f);
+            
+            // Linear interpolation between the two levels
+            level = level1 + fraction * (level2 - level1);
+        }
+        else
+        {
+            // Use the exact bin value when we're right on a bin
+            level = juce::jmap(juce::jlimit(mindB, maxdB,
+                juce::Decibels::gainToDecibels(fftData[fftDataIndex]) -
+                juce::Decibels::gainToDecibels((float)fftSize)),
+                mindB, maxdB, 0.0f, 1.0f);
+        }
 
         scopeData[i] = level;
 
